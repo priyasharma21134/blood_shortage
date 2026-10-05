@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BloodNet - Emergency Dashboard</title>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:240px;
+    height:100vh;
+    background:#ffffff;
+    border-right:1px solid #e5eaf0;
+    padding:25px 15px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+    padding:0 10px;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    background:#2478e5;
+    color:white;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.logo h2{
+    color:#172033;
+    font-size:20px;
+}
+
+.logo small{
+    color:#7b8794;
+}
+
+.menu{
+    padding:14px 15px;
+    margin:7px 0;
+    border-radius:8px;
+    cursor:pointer;
+    color:#526071;
+    transition:0.2s;
+}
+
+.menu:hover{
+    background:#eef5ff;
+    color:#2478e5;
+}
+
+.menu.active{
+    background:#2478e5;
+    color:white;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    margin-left:240px;
+    padding:30px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.header{
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:30px;
+    color:#172033;
+    margin-bottom:7px;
+}
+
+.header p{
+    color:#7b8794;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    border:1px solid #e8edf3;
+}
+
+.card-title{
+    color:#7b8794;
+    font-size:14px;
+    margin-bottom:12px;
+}
+
+.card-value{
+    font-size:30px;
+    font-weight:bold;
+    color:#172033;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    margin-bottom:25px;
+    border:1px solid #e8edf3;
+}
+
+.section h2{
+    margin-bottom:7px;
+    color:#172033;
+}
+
+.section > p{
+    color:#7b8794;
+    margin-bottom:18px;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:14px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+}
+
+th{
+    background:#f7f9fc;
+    color:#526071;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d8dee7;
+    border-radius:7px;
+    font-size:14px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+button{
+    background:#2478e5;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+button:hover{
+    background:#1766cc;
+}
+
+
+/* =========================
+   REQUEST
+========================= */
+
+.request{
+    padding:18px;
+    border:1px solid #e5eaf0;
+    border-radius:10px;
+    margin-bottom:12px;
+    background:#fafcff;
+}
+
+.request h3{
+    margin-bottom:8px;
+}
+
+.request p{
+    margin:6px 0;
+    color:#526071;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:15px;
+    background:#fff3cd;
+    color:#856404;
+    font-size:12px;
+}
+
+
+/* =========================
+   HOSPITALS
+========================= */
+
+.hospital-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.hospital{
+    border:1px solid #e5eaf0;
+    padding:18px;
+    border-radius:10px;
+    background:white;
+}
+
+.hospital h3{
+    margin-bottom:10px;
+}
+
+.hospital p{
+    color:#667085;
+    margin:7px 0;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+#formMessage{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+#locationText{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:200px;
+    }
+
+    .main{
+        margin-left:200px;
+    }
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .hospital-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+
+@media(max-width:650px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    table{
+        font-size:12px;
+    }
+
+    th,
+    td{
+        padding:8px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ✚
+        </div>
+
+        <div>
+            <h2>BloodNet</h2>
+            <small>Emergency Network</small>
+        </div>
+
+    </div>
+
+
+    <div class="menu active"
+         onclick="openPage('dashboard',this)">
+        📊 Dashboard
+    </div>
+
+
+    <div class="menu"
+         onclick="openPage('inventory',this)">
+        🩸 Blood Inventory
+    </div>
+
+
+    <div class="menu"
+         onclick="openPage('addBlood',this)">
+        ➕ Add Blood
+    </div>
+
+
+    <div class="menu"
+         onclick="openPage('emergency',this)">
+        🚨 Emergency Requests
+    </div>
+
+
+    <div class="menu"
+         onclick="openPage('requests',this)">
+        📋 Requests
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="main">
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div id="dashboard" class="page active">
+
+    <div class="header">
+
+        <h1>
+            Blood Emergency Dashboard
+        </h1>
+
+        <p>
+            Real-time blood availability and emergency management
+        </p>
+
+    </div>
+
+
+    <!-- STAT CARDS -->
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Total Blood Units
+            </div>
+
+            <div
+                class="card-value"
+                id="totalUnits">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Blood Records
+            </div>
+
+            <div
+                class="card-value"
+                id="totalRecords">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Hospitals
+            </div>
+
+            <div
+                class="card-value"
+                id="totalHospitals">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Emergency Requests
+            </div>
+
+            <div
+                class="card-value"
+                id="totalRequests">
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LIVE INVENTORY -->
+
+    <div class="section">
+
+        <h2>
+            Live Blood Inventory
+        </h2>
+
+        <p>
+            Current blood availability across hospitals
+        </p>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Hospital
+                    </th>
+
+                    <th>
+                        Blood Group
+                    </th>
+
+                    <th>
+                        Available Units
+                    </th>
+
+                    <th>
+                        Capacity
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="dashboardTable">
+
+                <tr>
+
+                    <td colspan="5">
+                        Loading blood inventory...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- NEARBY HOSPITALS -->
+
+    <div class="section">
+
+        <h2>
+            Nearby Hospitals
+        </h2>
+
+        <p>
+            Hospitals available near your location
+        </p>
+
+
+        <button onclick="getLocation()">
+            📍 Use My Location
+        </button>
+
+
+        <p id="locationText"></p>
+
+
+        <div class="hospital-grid">
+
+
+            <div class="hospital">
+
+                <h3>
+                    RIMS Hospital
+                </h3>
+
+                <p>
+                    📍 Main Road, Ranchi
+                </p>
+
+                <p>
+                    🩸 Blood Bank Available
+                </p>
+
+                <p>
+                    🟢 Open
+                </p>
+
+            </div>
+
+
+            <div class="hospital">
+
+                <h3>
+                    AIIMS Hospital
+                </h3>
+
+                <p>
+                    📍 Medical Campus
+                </p>
+
+                <p>
+                    🩸 Blood Bank Available
+                </p>
+
+                <p>
+                    🟢 Open
+                </p>
+
+            </div>
+
+
+            <div class="hospital">
+
+                <h3>
+                    District Hospital
+                </h3>
+
+                <p>
+                    📍 Main City
+                </p>
+
+                <p>
+                    🩸 Emergency Support
+                </p>
+
+                <p>
+                    🟢 Open
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     INVENTORY
+===================================================== -->
+
+<div id="inventory" class="page">
+
+    <div class="header">
+
+        <h1>
+            Blood Inventory
+        </h1>
+
+        <p>
+            View current blood stock
+        </p>
+
+    </div>
+
+
+    <div class="section">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Hospital
+                    </th>
+
+                    <th>
+                        Blood Group
+                    </th>
+
+                    <th>
+                        Available Units
+                    </th>
+
+                    <th>
+                        Capacity
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="inventoryTable">
+
+                <tr>
+
+                    <td colspan="5">
+                        Loading...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ADD BLOOD
+===================================================== -->
+
+<div id="addBlood" class="page">
+
+    <div class="header">
+
+        <h1>
+            Add Blood
+        </h1>
+
+        <p>
+            Add or update blood availability
+        </p>
+
+    </div>
+
+
+    <div class="section">
+
+
+        <form id="bloodForm">
+
+            <div class="form-grid">
+
+
+                <input
+                    type="text"
+                    id="hospitalName"
+                    placeholder="Hospital Name"
+                    required
+                >
+
+
+                <select
+                    id="bloodGroup"
+                    required
+                >
+
+                    <option value="">
+                        Select Blood Group
+                    </option>
+
+                    <option value="A+">
+                        A+
+                    </option>
+
+                    <option value="A-">
+                        A-
+                    </option>
+
+                    <option value="B+">
+                        B+
+                    </option>
+
+                    <option value="B-">
+                        B-
+                    </option>
+
+                    <option value="AB+">
+                        AB+
+                    </option>
+
+                    <option value="AB-">
+                        AB-
+                    </option>
+
+                    <option value="O+">
+                        O+
+                    </option>
+
+                    <option value="O-">
+                        O-
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="number"
+                    id="units"
+                    placeholder="Available Units"
+                    min="0"
+                    required
+                >
+
+
+                <input
+                    type="number"
+                    id="capacity"
+                    placeholder="Total Capacity"
+                    min="0"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="full">
+                    Add / Update Blood Inventory
+                </button>
+
+
+            </div>
+
+        </form>
+
+
+        <p id="formMessage"></p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     EMERGENCY
+===================================================== -->
+
+<div id="emergency" class="page">
+
+    <div class="header">
+
+        <h1>
+            Emergency Requests
+        </h1>
+
+        <p>
+            Manage urgent blood requirements
+        </p>
+
+    </div>
+
+
+    <div class="section">
+
+        <div id="emergencyList">
+
+            <p>
+                Loading emergency requests...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     REQUESTS
+===================================================== -->
+
+<div id="requests" class="page">
+
+    <div class="header">
+
+        <h1>
+            Requests
+        </h1>
+
+        <p>
+            Blood request history
+        </p>
+
+    </div>
+
+
+    <div class="section">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Patient
+                    </th>
+
+                    <th>
+                        Blood Group
+                    </th>
+
+                    <th>
+                        Units
+                    </th>
+
+                    <th>
+                        Hospital
+                    </th>
+
+                    <th>
+                        Urgency
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="requestsTable">
+
+                <tr>
+
+                    <td colspan="6">
+                        Loading requests...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   SIDEBAR NAVIGATION
+===================================================== */
+
+function openPage(pageId, clickedMenu){
+
+    const pages =
+        document.querySelectorAll(".page");
+
+
+    pages.forEach(function(page){
+
+        page.classList.remove("active");
+
+    });
+
+
+    const selectedPage =
+        document.getElementById(pageId);
+
+
+    if(selectedPage){
+
+        selectedPage.classList.add("active");
+
+    }
+
+
+    const menus =
+        document.querySelectorAll(".menu");
+
+
+    menus.forEach(function(menu){
+
+        menu.classList.remove("active");
+
+    });
+
+
+    if(clickedMenu){
+
+        clickedMenu.classList.add("active");
+
+    }
+
+
+    if(pageId === "emergency" ||
+       pageId === "requests"){
+
+        loadEmergencyRequests();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   LOAD INVENTORY
+===================================================== */
+
+async function loadInventory(){
+
+    try{
+
+        const response =
+            await fetch("/api/inventory");
+
+
+        if(response.status === 401){
+
+            window.location.href =
+                "/login";
+
+            return;
+
+        }
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Inventory API Error: " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const dashboardTable =
+            document.getElementById(
+                "dashboardTable"
+            );
+
+
+        const inventoryTable =
+            document.getElementById(
+                "inventoryTable"
+            );
+
+
+        dashboardTable.innerHTML = "";
+
+        inventoryTable.innerHTML = "";
+
+
+        let totalUnits = 0;
+
+        let hospitals = new Set();
+
+
+        if(!Array.isArray(data) ||
+           data.length === 0){
+
+
+            dashboardTable.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        No blood inventory available
+                    </td>
+                </tr>
+            `;
+
+
+            inventoryTable.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        No blood inventory available
+                    </td>
+                </tr>
+            `;
+
+
+            document.getElementById(
+                "totalUnits"
+            ).innerText = "0";
+
+
+            document.getElementById(
+                "totalRecords"
+            ).innerText = "0";
+
+
+            document.getElementById(
+                "totalHospitals"
+            ).innerText = "0";
+
+
+            return;
+
+        }
+
+
+        data.forEach(function(item){
+
+
+            const hospital =
+                item.hospital || "Unknown";
+
+
+            const group =
+                item.blood_group || "Unknown";
+
+
+            const available =
+                Number(
+                    item.available || 0
+                );
+
+
+            const capacity =
+                Number(
+                    item.capacity || 0
+                );
+
+
+            let status =
+                "Available";
+
+
+            if(available === 0){
+
+                status = "Critical";
+
+            }
+
+            else if(
+                capacity > 0 &&
+                (available / capacity) * 100 <= 20
+            ){
+
+                status = "Critical";
+
+            }
+
+            else if(
+                capacity > 0 &&
+                (available / capacity) * 100 <= 50
+            ){
+
+                status = "Low";
+
+            }
+
+
+            totalUnits += available;
+
+            hospitals.add(hospital);
+
+
+            const row = `
+
+                <tr>
+
+                    <td>
+                        ${hospital}
+                    </td>
+
+                    <td>
+                        ${group}
+                    </td>
+
+                    <td>
+                        ${available}
+                    </td>
+
+                    <td>
+                        ${capacity}
+                    </td>
+
+                    <td>
+                        ${status}
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            dashboardTable.innerHTML += row;
+
+            inventoryTable.innerHTML += row;
+
+        });
+
+
+        document.getElementById(
+            "totalUnits"
+        ).innerText =
+            totalUnits;
+
+
+        document.getElementById(
+            "totalRecords"
+        ).innerText =
+            data.length;
+
+
+        document.getElementById(
+            "totalHospitals"
+        ).innerText =
+            hospitals.size;
+
+    }
+
+
+    catch(error){
+
+        console.error(
+            "Inventory Error:",
+            error
+        );
+
+
+        document.getElementById(
+            "dashboardTable"
+        ).innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    Unable to connect to inventory API
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   LOAD DASHBOARD STATS
+===================================================== */
+
+async function loadDashboardStats(){
+
+    try{
+
+        const response =
+            await fetch("/api/dashboard");
+
+
+        if(response.status === 401){
+
+            window.location.href =
+                "/login";
+
+            return;
+
+        }
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Dashboard API Error"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        document.getElementById(
+            "totalUnits"
+        ).innerText =
+            data.total_units || 0;
+
+
+        document.getElementById(
+            "totalHospitals"
+        ).innerText =
+            data.hospitals || 0;
+
+
+        document.getElementById(
+            "totalRequests"
+        ).innerText =
+            data.emergency_requests || 0;
+
+
+    }
+
+
+    catch(error){
+
+        console.error(
+            "Dashboard Error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   ADD / UPDATE BLOOD
+===================================================== */
+
+document
+.getElementById("bloodForm")
+.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const hospital =
+            document.getElementById(
+                "hospitalName"
+            ).value.trim();
+
+
+        const bloodGroup =
+            document.getElementById(
+                "bloodGroup"
+            ).value;
+
+
+        const available =
+            Number(
+                document.getElementById(
+                    "units"
+                ).value
+            );
+
+
+        const capacity =
+            Number(
+                document.getElementById(
+                    "capacity"
+                ).value
+            );
+
+
+        const message =
+            document.getElementById(
+                "formMessage"
+            );
+
+
+        message.style.color =
+            "#2478e5";
+
+
+        message.innerText =
+            "Saving blood inventory...";
+
+
+        try{
+
+
+            const response =
+                await fetch(
+                    "/api/inventory",
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                hospital:
+                                    hospital,
+
+                                blood_group:
+                                    bloodGroup,
+
+                                available:
+                                    available,
+
+                                capacity:
+                                    capacity
+
+                            })
+
+                    }
+                );
+
+
+            if(response.status === 401){
+
+                window.location.href =
+                    "/login";
+
+                return;
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if(response.ok){
+
+                message.style.color =
+                    "green";
+
+
+                message.innerText =
+                    result.message ||
+                    "Blood inventory saved successfully!";
+
+
+                document
+                .getElementById(
+                    "bloodForm"
+                )
+                .reset();
+
+
+                await loadInventory();
+
+                await loadDashboardStats();
+
+            }
+
+
+            else{
+
+                message.style.color =
+                    "red";
+
+
+                message.innerText =
+                    result.message ||
+                    "Unable to save blood inventory.";
+
+            }
+
+        }
+
+
+        catch(error){
+
+            console.error(
+                "Add Blood Error:",
+                error
+            );
+
+
+            message.style.color =
+                "red";
+
+
+            message.innerText =
+                "Backend connection error.";
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   LOAD EMERGENCY REQUESTS
+===================================================== */
+
+async function loadEmergencyRequests(){
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/emergency"
+            );
+
+
+        if(response.status === 401){
+
+            window.location.href =
+                "/login";
+
+            return;
+
+        }
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Emergency API Error"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const emergencyList =
+            document.getElementById(
+                "emergencyList"
+            );
+
+
+        const requestsTable =
+            document.getElementById(
+                "requestsTable"
+            );
+
+
+        emergencyList.innerHTML = "";
+
+        requestsTable.innerHTML = "";
+
+
+        if(!Array.isArray(data) ||
+           data.length === 0){
+
+
+            emergencyList.innerHTML = `
+                <p>
+                    No emergency requests found.
+                </p>
+            `;
+
+
+            requestsTable.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        No requests found.
+                    </td>
+                </tr>
+            `;
+
+
+            return;
+
+        }
+
+
+        data.forEach(function(item){
+
+
+            const patient =
+                item.patient || "Unknown";
+
+
+            const hospital =
+                item.hospital || "Unknown";
+
+
+            const group =
+                item.blood_group || "Unknown";
+
+
+            const units =
+                item.units || 0;
+
+
+            const urgency =
+                item.urgency || "Normal";
+
+
+            const status =
+                item.status || "Pending";
+
+
+            emergencyList.innerHTML += `
+
+                <div class="request">
+
+                    <h3>
+                        🚨 Emergency Blood Request
+                    </h3>
+
+                    <p>
+                        Patient:
+                        <b>${patient}</b>
+                    </p>
+
+                    <p>
+                        Blood Group:
+                        <b>${group}</b>
+                    </p>
+
+                    <p>
+                        Required Units:
+                        <b>${units}</b>
+                    </p>
+
+                    <p>
+                        Hospital:
+                        <b>${hospital}</b>
+                    </p>
+
+                    <p>
+                        Urgency:
+                        <b>${urgency}</b>
+                    </p>
+
+                    <span class="badge">
+                        ${status}
+                    </span>
+
+                </div>
+
+            `;
+
+
+            requestsTable.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${patient}
+                    </td>
+
+                    <td>
+                        ${group}
+                    </td>
+
+                    <td>
+                        ${units}
+                    </td>
+
+                    <td>
+                        ${hospital}
+                    </td>
+
+                    <td>
+                        ${urgency}
+                    </td>
+
+                    <td>
+                        <span class="badge">
+                            ${status}
+                        </span>
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+    }
+
+
+    catch(error){
+
+        console.error(
+            "Emergency Error:",
+            error
+        );
+
+
+        document.getElementById(
+            "emergencyList"
+        ).innerHTML = `
+            <p>
+                Unable to load emergency requests.
+            </p>
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   LOCATION
+===================================================== */
+
+function getLocation(){
+
+    const text =
+        document.getElementById(
+            "locationText"
+        );
+
+
+    if(!navigator.geolocation){
+
+        text.innerText =
+            "❌ Location is not supported.";
+
+        return;
+
+    }
+
+
+    text.innerText =
+        "📍 Detecting your location...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            const latitude =
+                position.coords.latitude;
+
+
+            const longitude =
+                position.coords.longitude;
+
+
+            console.log(
+                "Latitude:",
+                latitude
+            );
+
+
+            console.log(
+                "Longitude:",
+                longitude
+            );
+
+
+            text.innerText =
+                "✅ Location detected successfully.";
+
+        },
+
+
+        function(error){
+
+            console.log(
+                "Location Error:",
+                error
+            );
+
+
+            text.innerText =
+                "❌ Please allow location permission.";
+
+        }
+
+    );
+
+}
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
+async function startDashboard(){
+
+    await loadInventory();
+
+    await loadDashboardStats();
+
+}
+
+
+/* START */
+
+startDashboard();
+
+
+/* AUTO REFRESH EVERY 5 SECONDS */
+
+setInterval(
+    function(){
+
+        loadInventory();
+
+        loadDashboardStats();
+
+    },
+    5000
+);
+
+
+</script>
+
+
+</body>
+
+</html>
